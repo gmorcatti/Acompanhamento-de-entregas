@@ -26,17 +26,13 @@ const hasStartedLocationUpdates = async () => {
 }
 
 TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
-  if (error) {
-    // Error occurred - check `error.message` for more details.
-    return;
-  }
+  if (error) return console.log('oi');
+
   if (data) {
     const { locations } = data;
-    console.log("Olá", locations);
     axios.post("https://webhook.site/8c98edce-c395-4560-8e7f-bebbda726f63", {
       ...locations,
     });
-    // do something with the locations captured in the background
   }
 });
 

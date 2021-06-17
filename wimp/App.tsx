@@ -10,7 +10,9 @@ import {
 import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
 
-import MyTask from "./myTask";
+import backgroundLocationTask from './src/tasks/backgroundLocation';
+
+import axios from "axios";
 
 type Region = {
   latitude: number;
@@ -19,60 +21,102 @@ type Region = {
   longitudeDelta: number;
 };
 
-
 export default function App() {
-  const [region, setRegion] = useState<Region>({} as Region);
+  const initialRegion = {
+    latitude: 0,
+    longitude: 0,
+    latitudeDelta: 0.02,
+    longitudeDelta: 0.01,
+  }
+
+  const [region, setRegion] = useState<Region>(initialRegion);
   const [errorMsg, setErrorMsg] = useState<string>("");
-  const [latitude, setLatitude] = useState<number>(0);
-  const [longitude, setLongitude] = useState<number>(0);
+  const [startMap, setStartMap] = useState<boolean>(false);
 
   useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestBackgroundPermissionsAsync();
+    axios.get("https://webhook.site/8c98edce-c395-4560-8e7f-bebbda726f63");
+    // getCoordinateIfPermitted()
 
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
-
-      const location = await Location.getCurrentPositionAsync({});
-      const latitude = location.coords.latitude || 0;
-      const longitude = location.coords.longitude || 0;
-
-      setRegion({
-        latitude,
-        longitude,
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.01,
-      });
-      setLatitude(latitude);
-      setLongitude(longitude);
-    })();
+    // const locationOptions = {
+    //   accuracy: Location.Accuracy.Balanced,
+    //   timeInterval: 10000,
+    //   distanceInterval: 0
+    // }
+    // Location.watchPositionAsync(locationOptions, (location) => {
+    //   console.log('PEGOU!', location)
+    // })
   }, []);
+
+  function toogleMap() {
+    console.log('entrou')
+    if(!startMap) {
+      console.log('entrou', startMap)
+      setStartMap(true);
+      getCoordinateIfPermitted()
+    } else {
+      setStartMap(false);
+    }
+  }
+
+  async function getCoordinateIfPermitted() {
+    
+    const { status } = await Location.requestBackgroundPermissionsAsync();
+      
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      return;
+    }
+    
+    const location = await Location.getCurrentPositionAsync({});
+
+    const latitude = location.coords.latitude || 0;
+    const longitude = location.coords.longitude || 0;
+
+    setRegion({
+      ...region,
+      latitude,
+      longitude,
+    });
+
+    return { latitude, longitude }
+  }
+
+  function startTravel() {
+    backgroundLocationTask.register()
+      .then(() => console.log("Registrou"))
+      .catch((err) => console.log("Erro", err));
+    Alert.alert("Viagem Iniciada!");
+  }
+
+  function stopTravel() {
+    backgroundLocationTask.unregister()
+      .then(() => console.log("DESRegistrou"))
+      .catch((err) => console.log("erro", err));
+    Alert.alert("Viagem Finalizada!");
+  }
+
+  async function isTravelStarted() {
+    const isIniciado = await backgroundLocationTask.hasStartedLocationUpdates();
+    Alert.alert(`A viagem foi iniciada? \n${isIniciado ? 'Sim' : 'Não'}`);
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <View style={styles.mapContainer}>
-          {errorMsg ? (
+          {errorMsg || !startMap ? (
             <Text>{errorMsg}</Text>
           ) : (
             <MapView
               style={styles.map}
-              initialRegion={{
-                latitude: latitude || 0,
-                longitude: longitude || 0,
-                latitudeDelta: 0.02,
-                longitudeDelta: 0.01,
-              }}
+              initialRegion={initialRegion}
               region={region}
             >
               <Marker
                 coordinate={{
-                  latitude: latitude,
-                  longitude: longitude,
+                  latitude: region.latitude,
+                  longitude: region.longitude,
                 }}
-                // image={{ uri: "custom_pin" }}
               />
             </MapView>
           )}
@@ -80,38 +124,24 @@ export default function App() {
       </View>
       <View>
         <Button
-          onPress={async () => {
-            const isIniciado = await MyTask.hasStartedLocationUpdates();
-            Alert.alert("Iniciou? " + isIniciado);
-          }}
-          title="Pegar ao vivo aqui"
-          color="#ddfcef"
-        >
-          Iniciar Viagem
-        </Button>
+          onPress={() => toogleMap()}
+          title="Pegar localização"
+          color="#504ecc"
+        />
         <Button
-          onPress={() => {
-            MyTask.register()
-              .then(() => console.log("Registrou"))
-              .catch((err) => console.log("erro", err));
-            Alert.alert("Iniciou!");
-          }}
+          onPress={() => isTravelStarted()}
+          title="Viagem foi iniciada?"
+          color="#3deca3"
+        />
+        <Button
+          onPress={() => startTravel()}
           title="Iniciar Viagem "
-        >
-          Iniciar Viagem
-        </Button>
+        />
         <Button
-          onPress={() => {
-            MyTask.unregister()
-              .then(() => console.log("DESRegistrou"))
-              .catch((err) => console.log("erro", err));
-            Alert.alert("Finalizou!");
-          }}
+          onPress={() => stopTravel()}
           title="Finalizar Viagem"
           color="#cc5dcc"
-        >
-          Finalizar Viagem
-        </Button>
+        />
       </View>
     </SafeAreaView>
   );
@@ -131,17 +161,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     overflow: "hidden"
   },
-  teste: {
-    marginBottom: 20,
-  },
   map: {
     width: "100%",
     height: "100%",
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#fff',
-    backgroundColor: '#000',
-    // padding: 10,
-    justifyContent: "center",
   },
 });
