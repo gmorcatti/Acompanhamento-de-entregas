@@ -12,6 +12,7 @@
     "@expo-google-fonts/jost": "^0.1.0",
     "@expo/vector-icons": "^12.0.5",
     "axios": "^0.21.1",
+    "date-fns": "^2.22.1",
     "expo": "~41.0.1",
     "expo-app-loading": "^1.0.3",
     "expo-background-fetch": "~9.1.0",

@@ -6,10 +6,12 @@ export default {
     midGrey: '#E0E0E0',
     darkGrey: '#757575',
 
-    orange: '#FFDA6C',
-    darkOrange: '#FFC54C',
+    red: '#E44E4E',
 
-    green: '#009D00',
+    orange: '#FFDA6C',
+    darkOrange: '#F2B22B',
+
+    green: '#A0DD55',
 
     purple: '#6854ca',
 

@@ -1,5 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { format } from 'date-fns';
+
 import { FontAwesome5 } from "@expo/vector-icons";
 import colors from "../../../styles/colors";
 import fonts from "../../../styles/fonts";
@@ -9,16 +11,25 @@ type Props = {
 };
 
 export default function TileTravelInfo({ hasTravelStarted }: Props) {
+
+  function treatStartDate(date : Date) {
+    const formatedDate = format(date, "dd/MM/yyyy 'às' HH:mm");
+    return formatedDate;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.description}>
         <Text style={styles.title}>
           {hasTravelStarted ? "Viagem em Andamento" : "Aguardando..."}
         </Text>
-        <Text style={styles.subtitle}>
+        <Text style={[
+          styles.subtitle, 
+          hasTravelStarted ? styles.subtitleBorderRed : styles.subtitleBorderGreen
+        ]}>
           {hasTravelStarted
-            ? `Iniciada em: 18/06/2021 às 11:13\nPor: Gabriel Morcatti`
-            : `Inicie a viagem para iniciar o\nacompanhamento do processo.`}
+            ? `Iniciada em: ${treatStartDate(new Date())}\nPor: Gabriel Morcatti`
+            : `Inicie a viagem para realizar o\nacompanhamento do processo.`}
         </Text>
       </View>
       <View>
@@ -26,8 +37,9 @@ export default function TileTravelInfo({ hasTravelStarted }: Props) {
           <View style={styles.icon}>
             <FontAwesome5 
                 name={hasTravelStarted ? 'play' : 'stop'} 
-                size={25} 
-                color={colors.darkOrange}
+                size={25}
+                color={colors.purple}
+                // color={hasTravelStarted ? colors.green : colors.red}
             />
           </View>
         </View>
@@ -64,7 +76,12 @@ const styles = StyleSheet.create({
     color: colors.lightGrey,
     paddingLeft: 10,
     borderLeftWidth: 3,
-    borderColor: colors.darkOrange,
+  },
+  subtitleBorderRed: {
+    borderColor: colors.red,
+  },
+  subtitleBorderGreen: {
+    borderColor: colors.green,
   },
   icon: {
     alignItems: "center",

@@ -5,8 +5,8 @@ import {
     StyleSheet
 } from 'react-native';
 
-import colors from '../styles/colors';
-import fonts from '../styles/fonts';
+import colors from '../../../styles/colors';
+import fonts from '../../../styles/fonts';
 
 type Props = {
     text: string;
@@ -33,7 +33,8 @@ export function Button({ text, onPress, color } : Props) {
 const styles = StyleSheet.create({
     container: {
         height: 56,
-        borderRadius: 16,
+        width: '50%',
+        borderRadius: 40,
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 10

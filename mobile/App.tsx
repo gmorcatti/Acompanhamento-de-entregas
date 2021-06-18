@@ -8,6 +8,7 @@ import {
 } from '@expo-google-fonts/jost';
 
 import StartTravel from './src/pages/StartTravel/index';
+import Signin from './src/pages/Signin/index';
 
 export default function App() {
 
@@ -19,6 +20,6 @@ export default function App() {
   if(!fontsLoaded) return <AppLoading/>;
 
   return (
-    <StartTravel/>
+    <Signin/>
   );
 }

@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 3,
   },
   buttonConfirm: {
-    backgroundColor: colors.orange,
+    backgroundColor: colors.green,
   },
   buttonCancel: {
     backgroundColor: colors.darkGrey,

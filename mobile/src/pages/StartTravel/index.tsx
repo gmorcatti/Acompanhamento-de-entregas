@@ -43,7 +43,9 @@ export default function StartTravel() {
       />
       <SafeAreaView style={styles.wrapper}>
         <View style={styles.header}>
-          <Text style={styles.title}>Olá, Gabriel!</Text>
+          <Text style={styles.title}>
+            Olá, Gabriel!
+          </Text>
           <Text style={styles.subtitle}>
             Quando estiver preparado, inicie a viagem.
           </Text>
@@ -57,9 +59,9 @@ export default function StartTravel() {
           />
         </View>
         {hasTravelStarted ? (
-          <Button onPress={stopTravel} text="Finalizar Viagem" />
+          <Button onPress={stopTravel} text="Finalizar Viagem" color={colors.red} />
         ) : (
-          <Button onPress={startTravel} text="Iniciar Viagem " />
+          <Button onPress={startTravel} text="Iniciar Viagem " color={colors.green} />
         )}
       </SafeAreaView>
     </>
