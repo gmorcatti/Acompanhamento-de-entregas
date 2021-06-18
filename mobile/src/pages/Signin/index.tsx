@@ -14,10 +14,16 @@ import { Feather, Fontisto } from "@expo/vector-icons";
 import fonts from "../../styles/fonts";
 import { Button } from "./components/Button";
 import colors from "../../styles/colors";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Signin() {
+    const navigation = useNavigation();
   const [text, onChangeText] = React.useState<string>("");
   const [number, onChangeNumber] = React.useState<string>("");
+
+  function handleLogin() {
+    navigation.navigate('StartTravel');
+  }
 
   return (
     <SafeAreaView style={[styles.container, styles.externalContainer]}>
@@ -50,7 +56,7 @@ export default function Signin() {
           </InputIcon>
         </View>
         <View style={styles.button}>
-          <Button text="Login" onPress={() => {}} color={colors.darkOrange} />
+          <Button text="Login" onPress={() => handleLogin()} color={colors.darkOrange} />
         </View>
       </KeyboardAvoidingView>
       <View style={styles.forgotPassword}>
