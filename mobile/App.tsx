@@ -7,7 +7,7 @@ import {
   Jost_600SemiBold
 } from '@expo-google-fonts/jost';
 
-import StartTravel from './src/pages/StartTravel';
+import StartTravel from './src/pages/StartTravel/index';
 
 export default function App() {
 
@@ -18,5 +18,7 @@ export default function App() {
 
   if(!fontsLoaded) return <AppLoading/>;
 
-  return <StartTravel/>;
+  return (
+    <StartTravel/>
+  );
 }
