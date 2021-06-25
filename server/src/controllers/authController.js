@@ -53,7 +53,6 @@ const authenticate = async (req, res) => {
         transportador,
         token
     });
-
 }
 
 module.exports = {
