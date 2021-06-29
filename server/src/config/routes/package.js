@@ -5,6 +5,7 @@ const packageController = require('../../controllers/packageController');
 
 router.use(authMiddleware);
 
-router.get('/', packageController.teste);
+router.post('/create', packageController.createPackage);
+router.get('/getLocation/:id', packageController.getPackageLocation);
 
 module.exports = router;

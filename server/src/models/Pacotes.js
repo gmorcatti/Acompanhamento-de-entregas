@@ -10,13 +10,21 @@ const PacotesSchema = new Schema({
         default: true,
     },
     stoppedIn: {
-        type: String,
-        required: function() {
-            return this.isStopped;
-        }
+        latitude: {
+            type: String,
+            required: function() {
+                return this.isStopped;
+            }
+        },
+        longitude: {
+            type: String,
+            required: function() {
+                return this.isStopped;
+            }
+        },
     },
     transportador: {
-        type: [String],
+        type: String,
         required: function() {
             return !this.isStopped;
         }
