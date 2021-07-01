@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, SafeAreaView } from "react-native";
-
 import axios from "axios";
 
 import backgroundLocationTask from "../../tasks/backgroundLocation";
 import fonts from "../../styles/fonts";
 import colors from "../../styles/colors";
+import storage from "../../storage";
 
 import { Button } from "../../components/Button";
+import { showToast } from "../../components/toast";
 
 import ConfirmModal from "./components/ConfirmModal";
 import MapContainer from "./components/MapContainer";
 import TileTravelInfo from "./components/TileTravelInfo";
-import storage from "../../storage";
 
 export default function StartTravel() {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [hasTravelStarted, setHasTravelStarted] = useState<boolean>(false);
   const [name, setName] = useState<string>('...');
+  const [modalType, setModalType] = useState<string>('start');
 
   useEffect(() => {
     (async () => {
@@ -36,7 +37,8 @@ export default function StartTravel() {
     })()
   }, [])
 
-  function startTravel() {
+  function startOrStopTravel(type : string) {
+    setModalType(type);
     setModalVisible(true);
   }
 
@@ -58,11 +60,12 @@ export default function StartTravel() {
         .register()
         .then(() => setHasTravelStarted(true))
     } catch (e) {
-      console.log('ERRO TO START TRAVEL: ', e)
+      const errorMessage = e.response.data.error;
+      showToast(`Erro ao iniciar viagem:\n${errorMessage}`);
     }
   }
 
-  async function stopTravel() {
+  async function confirmStopTravel() {
     try {
       const token = await storage.getData('token');
       
@@ -80,7 +83,8 @@ export default function StartTravel() {
         .unregister()
         .then(() => setHasTravelStarted(false))
     } catch (e) {
-      console.log('ERRO TO FINISH TRAVEL: ', e)
+      const errorMessage = e.response.data.error;
+      showToast(`Erro ao encerrar viagem:\n${errorMessage}`);
     }
   }
 
@@ -89,7 +93,8 @@ export default function StartTravel() {
       <ConfirmModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        confirmButton={confirmStartTravel}
+        confirmButton={modalType == 'start' ? confirmStartTravel : confirmStopTravel}
+        type={modalType}
       />
       <SafeAreaView style={styles.wrapper}>
         <View style={styles.header}>
@@ -106,12 +111,13 @@ export default function StartTravel() {
         <View style={styles.tileTravelInfo}>
           <TileTravelInfo 
             hasTravelStarted={hasTravelStarted}
+            name={name}
           />
         </View>
         {hasTravelStarted ? (
-          <Button onPress={stopTravel} text="Finalizar Viagem" color={colors.red} />
+          <Button onPress={() => startOrStopTravel('stop')} text="Finalizar Viagem" color={colors.red} />
         ) : (
-          <Button onPress={startTravel} text="Iniciar Viagem " color={colors.green} />
+          <Button onPress={() => startOrStopTravel('start')} text="Iniciar Viagem " color={colors.green} />
         )}
       </SafeAreaView>
     </>

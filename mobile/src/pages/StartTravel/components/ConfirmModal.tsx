@@ -10,6 +10,7 @@ import colors from "../../../styles/colors";
 
 type Props = {
   modalVisible: boolean;
+  type: string;
   setModalVisible: Function;
   confirmButton: Function;
 };
@@ -18,6 +19,7 @@ export default function ConfirmModal({
   modalVisible,
   setModalVisible,
   confirmButton,
+  type
 }: Props) {
   return (
     <Modal
@@ -29,7 +31,7 @@ export default function ConfirmModal({
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Text style={styles.modalText}>
-            Você confirma o início da viagem?
+            Você confirma o {type == 'start' ? 'início' : 'término'} da viagem?
           </Text>
           <View style={styles.buttonsGroup}>
             <Pressable

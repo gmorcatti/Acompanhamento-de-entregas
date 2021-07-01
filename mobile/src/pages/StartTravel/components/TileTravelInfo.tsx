@@ -8,9 +8,10 @@ import fonts from "../../../styles/fonts";
 
 type Props = {
   hasTravelStarted: boolean;
+  name: string;
 };
 
-export default function TileTravelInfo({ hasTravelStarted }: Props) {
+export default function TileTravelInfo({ hasTravelStarted, name }: Props) {
 
   function treatStartDate(date : Date) {
     const formatedDate = format(date, "dd/MM/yyyy 'às' HH:mm");
@@ -28,7 +29,7 @@ export default function TileTravelInfo({ hasTravelStarted }: Props) {
           hasTravelStarted ? styles.subtitleBorderRed : styles.subtitleBorderGreen
         ]}>
           {hasTravelStarted
-            ? `Iniciada em: ${treatStartDate(new Date())}\nPor: Gabriel Morcatti`
+            ? `Iniciada em: ${treatStartDate(new Date())}\nPor: ${name}`
             : `Inicie a viagem para realizar o\nacompanhamento do processo.`}
         </Text>
       </View>
