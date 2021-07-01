@@ -5,6 +5,7 @@ const transportadorController = require('../../controllers/transportadorControll
 
 router.use(authMiddleware);
 
+router.get('/name', transportadorController.getName);
 router.put('/travelStatus', transportadorController.updateTravelStatus);
 router.put('/location', transportadorController.updateLocation);
 

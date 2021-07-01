@@ -10,19 +10,46 @@ import {
 } from "react-native";
 import InputIcon from "./components/inputIcon";
 
+import axios from "axios";
 import { Feather, Fontisto } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+
 import fonts from "../../styles/fonts";
 import { Button } from "./components/Button";
 import colors from "../../styles/colors";
-import { useNavigation } from "@react-navigation/native";
+import storage from "../../storage";
 
 export default function Signin() {
-    const navigation = useNavigation();
-  const [text, onChangeText] = React.useState<string>("");
-  const [number, onChangeNumber] = React.useState<string>("");
+  const navigation = useNavigation();
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
 
-  function handleLogin() {
-    navigation.navigate('StartTravel');
+  async function handleLogin() {
+    try {
+      const token = await authenticate();
+      const bearerToken = `Bearer ${token}`;
+      console.log(bearerToken);
+      await storage.storeData('token', bearerToken);
+
+      navigation.navigate("StartTravel");
+    } catch (e) {
+      console.log('AUTH ERROR', e.message);
+    }
+  }
+
+  async function authenticate() {
+    try {
+      const userInfo = {
+        email,
+        password
+      }
+      const auth = await axios.post('https://wimp-morcatti.herokuapp.com/auth/authenticate', userInfo);
+      const token = auth.data.token;
+      
+      return token;      
+    } catch (e) {
+      throw e;
+    }
   }
 
   return (
@@ -39,16 +66,16 @@ export default function Signin() {
         </View>
         <View style={styles.inputs}>
           <InputIcon
-            onChangeText={onChangeText}
-            value={text}
+            onChangeText={setEmail}
+            value={email}
             placeholder="E-mail"
             keyboardType="email-address"
           >
             <Fontisto name="email" size={25} color={"#123456"} />
           </InputIcon>
           <InputIcon
-            onChangeText={onChangeNumber}
-            value={number}
+            onChangeText={setPassword}
+            value={password}
             placeholder="Senha"
             secureTextEntry
           >
@@ -56,7 +83,11 @@ export default function Signin() {
           </InputIcon>
         </View>
         <View style={styles.button}>
-          <Button text="Login" onPress={() => handleLogin()} color={colors.darkOrange} />
+          <Button
+            text="Login"
+            onPress={handleLogin}
+            color={colors.darkOrange}
+          />
         </View>
       </KeyboardAvoidingView>
       <View style={styles.forgotPassword}>
@@ -108,6 +139,6 @@ const styles = StyleSheet.create({
   linkForgotPassword: {
     fontFamily: fonts.heading,
     fontSize: 16,
-    color: colors.darkOrange
+    color: colors.darkOrange,
   },
 });

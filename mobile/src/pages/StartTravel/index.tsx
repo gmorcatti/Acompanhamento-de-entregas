@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, SafeAreaView } from "react-native";
 
-import backgroundLocationTask from "../../tasks/backgroundLocation";
+import axios from "axios";
 
+import backgroundLocationTask from "../../tasks/backgroundLocation";
 import fonts from "../../styles/fonts";
 import colors from "../../styles/colors";
 
@@ -11,27 +12,76 @@ import { Button } from "../../components/Button";
 import ConfirmModal from "./components/ConfirmModal";
 import MapContainer from "./components/MapContainer";
 import TileTravelInfo from "./components/TileTravelInfo";
+import storage from "../../storage";
 
 export default function StartTravel() {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [hasTravelStarted, setHasTravelStarted] = useState<boolean>(false);
+  const [name, setName] = useState<string>('...');
+
+  useEffect(() => {
+    (async () => {
+      const token = await storage.getData('token');
+  
+      const {data} = await axios({
+        method: "get",
+        url: "https://wimp-morcatti.herokuapp.com/transportador/name",
+        headers: {
+          "Authorization": token,
+          "Content-Type": "application/json"
+        }
+      });
+
+      setName(data.name)
+    })()
+  }, [])
 
   function startTravel() {
     setModalVisible(true);
   }
 
-  function confirmStartTravel() {
-    backgroundLocationTask
-      .register()
-      .then(() => setHasTravelStarted(true))
-      .catch((err) => console.log("Erro: ", err.message));
+  async function confirmStartTravel() {
+    try {
+      const token = await storage.getData('token');
+      
+      await axios({
+        method: "put",
+        url: "https://wimp-morcatti.herokuapp.com/transportador/travelStatus", 
+        data: { isTraveling: true },
+        headers: {
+          "Authorization": token,
+          "Content-Type": "application/json"
+        }
+      });
+  
+      backgroundLocationTask
+        .register()
+        .then(() => setHasTravelStarted(true))
+    } catch (e) {
+      console.log('ERRO TO START TRAVEL: ', e)
+    }
   }
 
-  function stopTravel() {
-    backgroundLocationTask
-      .unregister()
-      .then(() => setHasTravelStarted(false))
-      .catch((err) => console.log("Erro: ", err.message));
+  async function stopTravel() {
+    try {
+      const token = await storage.getData('token');
+      
+      await axios({
+        method: "put",
+        url: "https://wimp-morcatti.herokuapp.com/transportador/travelStatus", 
+        data: { isTraveling: false },
+        headers: {
+          "Authorization": token,
+          "Content-Type": "application/json"
+        }
+      });
+  
+      backgroundLocationTask
+        .unregister()
+        .then(() => setHasTravelStarted(false))
+    } catch (e) {
+      console.log('ERRO TO FINISH TRAVEL: ', e)
+    }
   }
 
   return (
@@ -44,7 +94,7 @@ export default function StartTravel() {
       <SafeAreaView style={styles.wrapper}>
         <View style={styles.header}>
           <Text style={styles.title}>
-            Olá, Gabriel!
+            Olá, {name}!
           </Text>
           <Text style={styles.subtitle}>
             Quando estiver preparado, inicie a viagem.
