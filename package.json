@@ -1,0 +1,12 @@
+{
+  "name": "wimproot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "heroku-prebuild": "cd server && npm install"
+  },
+  "author": "",
+  "license": "ISC"
+}
+  
