@@ -1,0 +1,26 @@
+#viewPackagePage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  background-color: var(--darkOrange);
+
+  height: 95vh;
+  width: 80vw;
+
+  overflow: hidden;
+  border-radius: 20px;
+
+  color: var(--darkGrey);
+
+  section {
+    flex-grow: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+  }
+
+}

@@ -1,0 +1,15 @@
+#mapContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 800px;
+  width: 73vw;
+
+  border-radius: 20px;
+  overflow: hidden;
+
+  .leaflet-container {
+    width: 100vw;
+    height: 100vh;
+  }
+}

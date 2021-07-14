@@ -6,5 +6,5 @@ module.exports = app => {
     app.use('/auth', auth);
     app.use('/package', package);
     app.use('/transportador', transportador);
-    app.get('/', (req, res) => res.send({ Status: 'Ligada' }))
+    app.get('/', (req, res) => res.send({ Status: 'Ligada' }));
 }
