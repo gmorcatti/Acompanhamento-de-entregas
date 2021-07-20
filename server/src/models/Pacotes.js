@@ -5,6 +5,11 @@ const PacotesSchema = new Schema({
         type: String,
         required: [true, 'O nome do pacote é obrigatório']
     },
+    receiver: {
+        name: String,
+        cep: String,
+        number: String
+    },
     isStopped: {
         type: Boolean,
         default: true,

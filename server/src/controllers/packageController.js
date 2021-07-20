@@ -2,7 +2,7 @@ const Pacotes = require('../models/Pacotes');
 const Transportador = require('../models/Transportador');
 
 const createPackage = async (req, res) => {
-
+    
     const package = {...req.body};
 
     try {

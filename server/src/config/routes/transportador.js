@@ -3,6 +3,8 @@ const authMiddleware = require('../middlewares/auth');
 
 const transportadorController = require('../../controllers/transportadorController');
 
+router.get('/', transportadorController.getAll);
+
 router.use(authMiddleware);
 
 router.get('/name', transportadorController.getName);

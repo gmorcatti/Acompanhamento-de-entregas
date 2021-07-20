@@ -1,24 +1,57 @@
 import React, { useState } from "react";
-import "./styles.scss";
-
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 
+import baseUrl from "../../Config/baseUrl";
+import {showError} from '../../Config/global';
+
+import "./styles.scss";
+
 function Home() {
+  const history = useHistory();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rastreioCode, setRastreioCode] = useState("");
 
-    function submitLogin(event) {
-        event.preventDefault();
+  async function submitLogin(event) {
+      event.preventDefault();
+    try {
+      if(!email || !password) return showError('Preencha todos os dados de acesso');
+  
+      const authInfo = {
+        email, 
+        password
+      };
+  
+      const response = await axios.post(`${baseUrl}/auth/authenticate`, authInfo);
+      
+      const token = response.data.token;
+      localStorage.setItem('___wimpauth', token);
 
-        console.log(email, password)
+      history.push(`/createPackage`);
+    } catch(err) {
+      showError(err, 'Ocorreu um erro inesperado. Tente novamente.');
     }
 
-    function submitRastreio(event) {
-        event.preventDefault();
+  }
 
-        console.log(rastreioCode)
+  async function submitRastreio(event) {
+    event.preventDefault();
+
+    try {
+      if(!rastreioCode) return showError('Código de rastreio não inserido!');
+  
+      await axios.get(`${baseUrl}/package/getLocation/${rastreioCode}`);
+      
+      history.push(`/viewPackage/${rastreioCode}`);
+      
+    } catch (err) {
+      showError(err, 'Pacote não encontrado, confira o código de rastreio.');
     }
+
+  }
 
   return (
     <div id="homePage">

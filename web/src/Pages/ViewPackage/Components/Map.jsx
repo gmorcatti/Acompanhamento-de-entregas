@@ -1,20 +1,31 @@
-import React from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import React, { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 
 import "./mapStyles.scss";
 
-function Map() {
+function Map({ latitude, longitude }) {
+  const [center, setCenter] = useState([latitude, longitude]);
+
+  useEffect(() => {
+    setCenter([latitude, longitude]);
+  }, [latitude, longitude]);
+
+  function SetCenter({ center }) {
+    const map = useMap();
+    map.setView(center, 21);
+    return null;
+  }
+
   return (
     <div id="mapContainer">
-      <MapContainer center={[-19.9317786,-43.9704423]} zoom={13} scrollWheelZoom={true}>
+      <MapContainer center={center} zoom={21} scrollWheelZoom={true}>
+        <SetCenter center={center} />
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={[-19.9317786,-43.9704423]}>
-          <Popup>
-            O transportador está aqui
-          </Popup>
+        <Marker position={center}>
+          <Popup>O transportador está aqui</Popup>
         </Marker>
       </MapContainer>
     </div>

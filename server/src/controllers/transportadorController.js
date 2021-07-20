@@ -40,6 +40,19 @@ const getName = async (req, res) => {
     }
 }
 
+const getAll = async (req, res) => {
+    try {
+        let transportador = await Transportador.find({}, 'id fullname');
+
+        transportador = transportador.filter(person => person._id && person.fullname);
+
+        res.status(200).send(transportador);
+    } catch(err) {
+        console.log(err.message);
+        res.status(400).send({ error: 'Erro ao buscar nome do transportador' });
+    }
+}
+
 const updateLocation = async (req, res) => {
     try {
         const location = {
@@ -70,6 +83,7 @@ const updateLocation = async (req, res) => {
 }
 
 module.exports = {
+    getAll,
     updateTravelStatus,
     updateLocation,
     getName
