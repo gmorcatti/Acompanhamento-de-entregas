@@ -27,12 +27,12 @@ export default function Signin() {
 
   async function handleLogin() {
     try {
-      const token = await authenticate();
-      const bearerToken = `Bearer ${token}`;
+      // const token = await authenticate();
+      // const bearerToken = `Bearer ${token}`;
 
-      await storage.storeData("token", bearerToken);
+      // await storage.storeData("token", bearerToken);
 
-      navigation.navigate("StartTravel");
+      navigation.navigate("Packages");
     } catch (e) {
       const errorMessage = e.response.data.error;
       showToast(`Erro ao realizar login:\n${errorMessage}`);

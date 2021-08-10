@@ -22,11 +22,19 @@ const getPackageLocation = async (req, res) => {
     try {
         const packageId = req.params.id;
         const pacote = await Pacotes.findById(packageId);
-        
+
+        if(pacote.isStopped) {
+            return res.send({
+                isTraveling: false,
+                location: pacote.stoppedIn
+            });
+        }
+
         const transportadorId = pacote.transportador;
+        console.log(pacote);
         
         const transportador = await Transportador.findById(transportadorId);
-
+        console.log(transportador)
         if(transportador.isTraveling){
             const transportadorLocation = {
                 latitude: transportador.latitude,

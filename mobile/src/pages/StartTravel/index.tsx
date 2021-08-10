@@ -13,6 +13,7 @@ import { showToast } from "../../components/toast";
 import ConfirmModal from "./components/ConfirmModal";
 import MapContainer from "./components/MapContainer";
 import TileTravelInfo from "./components/TileTravelInfo";
+import TabNavigator from "../../components/TabNavigator";
 
 export default function StartTravel() {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -119,6 +120,7 @@ export default function StartTravel() {
         ) : (
           <Button onPress={() => startOrStopTravel('start')} text="Iniciar Viagem " color={colors.green} />
         )}
+        <TabNavigator/>
       </SafeAreaView>
     </>
   );

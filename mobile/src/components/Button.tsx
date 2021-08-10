@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         color: colors.white,
-        fontFamily: fonts.text
+        fontFamily: fonts.text,
+        paddingHorizontal: 10
     }
 })
