@@ -20,6 +20,29 @@ const createPackage = async (req, res) => {
     }
 }
 
+const setTransportador = async (req, res) => {
+    
+    const packageId = req.body.packageId;
+
+    try {
+
+        const objUpdate = {
+            transportador: req.userId
+        }
+
+        await Pacotes.findByIdAndUpdate(
+            packageId, 
+            objUpdate
+        );
+
+        return res.status(200).send({ message: 'Atualização de transportador realizada com sucesso' });
+
+    } catch(err) {
+        console.error(err)
+        return res.status(400).send({error: 'Erro ao atualizar transportador', message: err.message || err});
+    }
+}
+
 const getPackageLocation = async (req, res) => {
     try {
         const packageId = req.params.id;
@@ -77,5 +100,6 @@ const packageExists = async (req, res) => {
 module.exports = {
     createPackage,
     getPackageLocation,
-    packageExists
+    packageExists,
+    setTransportador
 }
