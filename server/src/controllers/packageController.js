@@ -1,6 +1,8 @@
 const Pacotes = require('../models/Pacotes');
 const Transportador = require('../models/Transportador');
 
+const ObjectId = require('mongodb').ObjectID;
+
 const createPackage = async (req, res) => {
     
     const package = {...req.body};
@@ -55,7 +57,25 @@ const getPackageLocation = async (req, res) => {
     }
 }
 
+const packageExists = async (req, res) => {
+    try {
+        const packageId = req.params.id;
+        const packageObjectId = ObjectId(packageId);
+
+        const pacote = await Pacotes.find({ _id: packageObjectId });
+
+        if(pacote.length > 0) return res.send(true);
+        else return res.send(false);
+        
+    } catch(err) {
+        return res.send(false);
+    }
+}
+
+
+
 module.exports = {
     createPackage,
-    getPackageLocation
+    getPackageLocation,
+    packageExists
 }
