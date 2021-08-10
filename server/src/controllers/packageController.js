@@ -27,7 +27,9 @@ const setTransportador = async (req, res) => {
     try {
 
         const objUpdate = {
-            transportador: req.userId
+            transportador: req.userId,
+            isStopped: false,
+            stoppedIn: {}
         }
 
         await Pacotes.findByIdAndUpdate(
@@ -95,11 +97,41 @@ const packageExists = async (req, res) => {
     }
 }
 
+const getPackageInfo = async (req, res) => {
+    try {
+        const packageId = req.params.id;
+        const packageObjectId = ObjectId(packageId);
 
+        const pacote = await Pacotes.findById(packageObjectId);
+
+        return res.send(pacote);
+        
+    } catch(err) {
+        console.error(err)
+        return res.status(400).send({error: 'Erro ao consultar pacote.', message: err.message || err});
+    }
+}
+
+const getAllPackagesByTransportador = async (req, res) => {
+    try {
+        const transportador = req.userId;
+
+        const pacotes = await Pacotes.find({ transportador });
+        
+        return res.send(pacotes);
+        
+    } catch(err) {
+        console.error(err)
+        return res.status(400).send({error: 'Erro ao consultar pacotes do transportador.', message: err.message || err});
+    }
+}
+ 
 
 module.exports = {
     createPackage,
     getPackageLocation,
     packageExists,
-    setTransportador
+    setTransportador,
+    getPackageInfo,
+    getAllPackagesByTransportador
 }
