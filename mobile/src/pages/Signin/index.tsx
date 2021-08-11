@@ -27,10 +27,10 @@ export default function Signin() {
 
   async function handleLogin() {
     try {
-      // const token = await authenticate();
-      // const bearerToken = `Bearer ${token}`;
+      const token = await authenticate();
+      const bearerToken = `Bearer ${token}`;
 
-      // await storage.storeData("token", bearerToken);
+      await storage.storeData("token", bearerToken);
 
       navigation.navigate("Packages");
     } catch (e) {

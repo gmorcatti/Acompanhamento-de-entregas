@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
+import axios from "axios";
 
 import { BarCodeScanner } from "expo-barcode-scanner";
 
@@ -8,9 +9,13 @@ import { Button } from "../../components/Button";
 import colors from "../../styles/colors";
 import fonts from '../../styles/fonts';
 
+import storage from '../../storage';
+
 export default function AddPackage() {
+  const [token, setToken] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [successScanned, setSuccessScanned] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -19,9 +24,62 @@ export default function AddPackage() {
     })();
   }, []);
 
-  const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    alert(`Item com código: ${data} adicionado a lista.`);
+  useEffect(() => {
+    (async () => {
+      const token = await storage.getData('token');
+      setToken(token);
+    })();
+  }, []);
+
+  async function setPackageTransportador(packageId) {
+    const response = await axios({
+      method: "put",
+      url: `https://wimp-morcatti.herokuapp.com/package/transportador`,
+      headers: {
+        "Authorization": token,
+        "Content-Type": "application/json"
+      },
+      data: {
+        packageId: packageId
+      }
+    });
+    
+    return response.data;
+  }
+
+  async function verifyIfPackageExists(packageId) {
+    const response = await axios({
+      method: "get",
+      url: `https://wimp-morcatti.herokuapp.com/package/${packageId}`,
+      headers: {
+        "Authorization": token,
+        "Content-Type": "application/json"
+      }
+    });
+    
+    return response.data;
+  }
+
+  const handleBarCodeScanned = async ({ data }) => {
+    try {
+      setScanned(true);
+      
+      const packageExists = await verifyIfPackageExists(data);
+
+      await setPackageTransportador(data);
+      
+      if(packageExists) {
+        setSuccessScanned(true);
+        alert(`Item com código: ${data} adicionado a lista.`);
+      } else {
+        setSuccessScanned(false);
+        alert(`Item com código: ${data} não encontrado no sistema.`);
+      }
+    } catch (err) {
+      console.log(err)
+      setSuccessScanned(false);
+      alert(`Erro ao consultar existencia do pacote.`);
+    }
   };
 
   if (hasPermission === null) {
@@ -48,7 +106,7 @@ export default function AddPackage() {
       <View>
         {scanned && (
             <Button
-            text="Adicionar nova carga"
+            text={ successScanned ? "Adicionar nova carga" : 'Tentar novamente' }
             color={colors.darkGrey}
             onPress={() => setScanned(false)}
             />
