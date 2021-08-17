@@ -48,6 +48,7 @@ function Home() {
       history.push(`/viewPackage/${rastreioCode}`);
       
     } catch (err) {
+      console.log(err.response.data)
       showError(err, 'Pacote não encontrado, confira o código de rastreio.');
     }
 

@@ -1,0 +1,21 @@
+#ManagementPage {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-direction: column;
+
+  background-color: var(--darkOrange);
+
+  min-height: 600px;
+  min-width: 85vw;
+  padding: 30px 30px;
+
+  overflow: hidden;
+  border-radius: 20px;
+
+  color: var(--darkGrey);
+
+  .pills-collumn {
+    align-self: center;
+  }
+}
