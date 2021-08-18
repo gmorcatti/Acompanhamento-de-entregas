@@ -30,7 +30,7 @@ function Home() {
       const token = response.data.token;
       localStorage.setItem('___wimpauth', token);
 
-      history.push(`/createPackage`);
+      history.push(`/management`);
     } catch(err) {
       showError(err, 'Ocorreu um erro inesperado. Tente novamente.');
     }
