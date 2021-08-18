@@ -7,6 +7,7 @@ router.get('/exists/:id', packageController.packageExists);
 router.get('/getLocation/:id', packageController.getPackageLocation);
 
 
+router.get('/', packageController.getAllPackages);
 router.get('/transportador', packageController.getAllPackagesByTransportador);
 
 router.get('/:id', packageController.getPackageInfo);

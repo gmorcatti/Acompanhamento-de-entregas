@@ -125,6 +125,36 @@ const getAllPackagesByTransportador = async (req, res) => {
         return res.status(400).send({error: 'Erro ao consultar pacotes do transportador.', message: err.message || err});
     }
 }
+
+const getAllPackages = async (req, res) => {
+    try {
+
+        const pacotes = await Pacotes.find({});
+        
+        const promises = pacotes.map(async (package) => {
+
+            const transportador = await Transportador.findById(package.transportador);
+            
+            const transportadorName = transportador ? transportador.fullname : '-';
+            
+            return {
+                name: package.name,
+                receiverName: package.receiver.name || '-',
+                receiverCEP: package.receiver.cep || '-',
+                isTravelling: !package.isStopped,
+                transportadorName: transportadorName
+            }
+        })
+
+        const treatedPackages = await Promise.all(promises);
+        
+        return res.send(treatedPackages);
+        
+    } catch(err) {
+        console.error(err)
+        return res.status(400).send({error: 'Erro ao consultar pacotes do transportador.', message: err.message || err});
+    }
+}
  
 
 module.exports = {
@@ -133,5 +163,6 @@ module.exports = {
     packageExists,
     setTransportador,
     getPackageInfo,
-    getAllPackagesByTransportador
+    getAllPackagesByTransportador,
+    getAllPackages
 }
