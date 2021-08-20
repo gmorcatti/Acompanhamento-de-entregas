@@ -156,6 +156,30 @@ const getAllPackages = async (req, res) => {
         return res.status(400).send({error: 'Erro ao consultar pacotes do transportador.', message: err.message || err});
     }
 }
+
+const removeTransportador = async (req, res) => {
+    try {
+
+        const packageId = req.body.id;
+
+        const objUpdate = {
+            transportador: null,
+            isStopped: true,
+        }
+
+        await Pacotes.findByIdAndUpdate(
+            packageId, 
+            objUpdate
+        );
+
+        
+        return res.send(treatedPackages);
+        
+    } catch(err) {
+        console.error(err)
+        return res.status(400).send({error: 'Erro ao deletar o transportador do pacote.', message: err.message || err});
+    }
+}
  
 
 module.exports = {
@@ -165,5 +189,6 @@ module.exports = {
     setTransportador,
     getPackageInfo,
     getAllPackagesByTransportador,
-    getAllPackages
+    getAllPackages,
+    removeTransportador
 }

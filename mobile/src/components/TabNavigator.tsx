@@ -21,11 +21,11 @@ export default function TabNavigator() {
             <View style={styles.tabContainer}>
                 <TouchableOpacity style={styles.view} onPress={() => goTo('Packages')}>
                     <Entypo name="list" size={24} color="black" />
-                    <Text style={styles.text}>Visualizar Pacotes</Text>
+                    <Text style={styles.text}>Visualizar Cargas</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.view} onPress={() => goTo('AddPackage')}>
                     <Entypo name="plus" size={24} color="black" />
-                    <Text style={styles.text}>Adicionar Pacote</Text>
+                    <Text style={styles.text}>Adicionar Carga</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.view} onPress={() => goTo('StartTravel')}>
                     <FontAwesome5 name="truck" size={16} color="black" />

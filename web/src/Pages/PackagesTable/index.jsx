@@ -12,8 +12,15 @@ function PackagesTable() {
   const [packages, setPackages] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`${baseUrl}/package`)
+    
+    const token = localStorage.getItem('___wimpauth');
+    axios({
+      url: `${baseUrl}/package`,
+      method: 'GET',
+      headers: {
+        authorization: 'Bearer ' + token,
+      }
+    })
       .then((response) => setPackages(response.data))
       .catch((error) => {
         console.error(error.response.data);

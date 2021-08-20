@@ -20,14 +20,7 @@ function CreatePackage() {
   const [number, setNumber] = useState("");
   const [code, setCode] = useState("");
 
-  useEffect(() => {
-    const token = localStorage.getItem('___wimpauth');
-    axios.get(`${baseUrl}/auth/verify/${token}`)
-      .catch(err => {
-        showError(err, 'Esta página requer autenticação');
-        history.push('/');
-      })
-  }, []);
+  
 
   function getCEPinfo(event, type) {
     let cepValue = event.target.value;
@@ -82,10 +75,16 @@ function CreatePackage() {
         },
       };
 
-      const response = await axios.post(
-        `${baseUrl}/package/create`,
-        packageInfo
-      );
+      
+      const token = localStorage.getItem('___wimpauth');
+      const response = await axios({
+        method: 'POST',
+        url: `${baseUrl}/package/create`,
+        data: packageInfo,
+        headers: {
+          authorization: 'Bearer ' + token,
+        }
+      });
       setCode(response.data._id);
       showSuccess('Carga criada com sucesso!');
     } catch (err) {

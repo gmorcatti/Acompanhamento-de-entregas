@@ -1,5 +1,10 @@
-import React from "react";
+import axios from "axios";
+import React, {useEffect} from "react";
 import { Row, Col, Nav, Tab, Tabs } from "react-bootstrap";
+import {useHistory} from 'react-router-dom';
+
+import baseUrl from "../../Config/baseUrl";
+import { showError } from "../../Config/global";
 
 import CreatePackage from "../CreatePackage";
 import PackagesTable from "../PackagesTable";
@@ -7,6 +12,17 @@ import PackagesTable from "../PackagesTable";
 import "./styles.scss";
 
 function Management() {
+  const history = useHistory();
+
+  useEffect(() => {
+    const token = localStorage.getItem('___wimpauth');
+    axios.get(`${baseUrl}/auth/verify/${token}`)
+      .catch(err => {
+        history.push('/');
+        showError(err, 'Esta página requer autenticação');
+      })
+  }, []);
+
   return (
     <div id="ManagementPage">
       <h1>Área do Gestor</h1>
