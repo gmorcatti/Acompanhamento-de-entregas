@@ -1,8 +1,15 @@
 #PackagesTablePage {
   
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+  // flex-direction: column;
+
+  border-radius: 13px;
+
+  .rdt_TableHeader {
+    background-color: transparent;
+    
+  }
 
 }

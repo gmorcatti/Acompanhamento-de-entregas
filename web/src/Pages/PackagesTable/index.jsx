@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useMemo, useEffect, useState } from "react";
 import DataTable, { createTheme } from "react-data-table-component";
+import { Link } from "react-router-dom";
 
 import { showError } from "../../Config/global";
 import baseUrl from "../../Config/baseUrl";
@@ -11,13 +12,14 @@ function PackagesTable() {
   const [packages, setPackages] = useState([]);
 
   useEffect(() => {
-    axios.get(`${baseUrl}/package`)
+    axios
+      .get(`${baseUrl}/package`)
       .then((response) => setPackages(response.data))
       .catch((error) => {
-        console.error(error.response.data)
-        showError('Não foi possível carregar os pacotes')
-      })
-  }, [packages])
+        console.error(error.response.data);
+        showError("Não foi possível carregar os pacotes");
+      });
+  }, [packages]);
 
   createTheme("packages", {
     text: {
@@ -25,10 +27,10 @@ function PackagesTable() {
       secondary: "#2aa198",
     },
     background: {
-      default: "transparent",
+      default: "#eeeeee",
     },
     context: {
-      background: "transparent",
+      background: "#ddd",
       text: "#FFFFFF",
     },
     divider: {
@@ -62,12 +64,19 @@ function PackagesTable() {
         name: "Em transporte?",
         selector: "isTravelling",
         sortable: true,
-        cell: (rowData) => <span>{rowData.isTravelling ? 'Sim' : 'Não'}</span>
+        cell: (rowData) => <span>{rowData.isTravelling ? "Sim" : "Não"}</span>,
       },
       {
         name: "Transportador",
         selector: "transportadorName",
         sortable: true,
+      },
+      {
+        name: "Localização",
+        selector: "id",
+        sortable: true,
+        cell: (rowData) =>
+          rowData.isTravelling ? <Link to={`/viewPackage/${rowData.id}`}>Visualizar</Link> : "-",
       },
     ],
     []
@@ -78,7 +87,7 @@ function PackagesTable() {
       <DataTable
         title="Pacotes em transporte"
         columns={columns}
-        theme="packages"
+        theme="default"
         noDataComponent="Não há transportes em andamento"
         data={packages}
       />

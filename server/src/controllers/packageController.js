@@ -49,7 +49,7 @@ const getPackageLocation = async (req, res) => {
     try {
         const packageId = req.params.id;
         const pacote = await Pacotes.findById(packageId);
-
+        console.log('entrou')
         if(pacote.isStopped) {
             return res.send({
                 isTraveling: false,
@@ -62,7 +62,7 @@ const getPackageLocation = async (req, res) => {
         
         const transportador = await Transportador.findById(transportadorId);
         console.log(transportador)
-        if(transportador.isTraveling){
+        if(transportador?.isTraveling){
             const transportadorLocation = {
                 latitude: transportador.latitude,
                 longitude: transportador.longitude,
@@ -134,10 +134,11 @@ const getAllPackages = async (req, res) => {
         const promises = pacotes.map(async (package) => {
 
             const transportador = await Transportador.findById(package.transportador);
-            
+
             const transportadorName = transportador ? transportador.fullname : '-';
             
-            return {
+            return {  
+                id: package._id,
                 name: package.name,
                 receiverName: package.receiver.name || '-',
                 receiverCEP: package.receiver.cep || '-',

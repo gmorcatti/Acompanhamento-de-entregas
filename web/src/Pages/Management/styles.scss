@@ -1,21 +1,45 @@
 #ManagementPage {
   display: flex;
   align-items: stretch;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
 
-  background-color: var(--darkOrange);
+  background-color: var(--green);
 
-  min-height: 600px;
-  min-width: 85vw;
-  padding: 30px 30px;
+  height: 100vh;
+  width: 100vw;
+  // padding: 30px 30px;
 
   overflow: hidden;
-  border-radius: 20px;
 
   color: var(--darkGrey);
+
+  h1 {
+    padding: 30px 50px;
+  }
+
+  nav {
+    margin-bottom: 0 !important;
+    padding: 0;
+    padding-left: 50px;
+    a {
+      color: var(--darkGrey);
+      font-size: 1.3rem;
+    }
+  }
 
   .pills-collumn {
     align-self: center;
   }
+
+  .tab-content {
+    height: 100%;
+    background-color: var(--lightGrey);
+    padding: 20px 80px;
+  }
+
+  .rdt_Table * {
+    font-size: 1.2rem;
+  }
+
 }
