@@ -173,7 +173,7 @@ const removeTransportador = async (req, res) => {
         );
 
         
-        return res.send(treatedPackages);
+        return res.send('Ok');
         
     } catch(err) {
         console.error(err)

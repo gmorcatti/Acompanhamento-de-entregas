@@ -41,6 +41,24 @@ export default function Packages() {
     return response.data;
   }
 
+  async function deleteTransportadorPackage(id) {
+    const response = await axios({
+      method: "delete",
+      url: `https://wimp-morcatti.herokuapp.com/package/transportador`,
+      data: {
+        id
+      },
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response.data;
+  }
+
+
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -54,7 +72,7 @@ export default function Packages() {
               <Text>Destinatário: {pack.receiver.name}</Text>
             </View>
             <View>
-              <TouchableHighlight onPress={() => console.log('ola')}>
+              <TouchableHighlight onPress={() => deleteTransportadorPackage(pack._id)}>
                 <AntDesign name="delete" size={24} color="black" />
               </TouchableHighlight>
             </View>
